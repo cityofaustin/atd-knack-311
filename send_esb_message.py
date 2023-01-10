@@ -53,7 +53,18 @@ def encode_special_chars(text):
 
 
 def get_record_filter(*, esb_status_match, fields):
-    """Construct a knack filter object to fetch activities that need to be sent to 311"""
+    """Constructs a knack filter object to fetch activities that need to be sent to 311
+
+    Args:
+        esb_status_match (string): the name of the activity status will be used to
+            identify records that need to be processed. this has so far been implemented
+            universally as 'READY_TO_SEND'. See config.py.
+        fields (dict): A dict of fields from config.py which map to knack field
+            identifiers.
+
+    Returns:
+        dict: A dict of Knack filter properties
+    """
     filters = {
         "match": "and",
         "rules": [
@@ -69,6 +80,16 @@ def get_record_filter(*, esb_status_match, fields):
 
 
 def build_template_dict(*, record, fields):
+    """Prepares the data that will populate the xml message template.
+
+    Args:
+        record (dict): A knack record
+        fields (dict): A dict of fields from config.py which map to knack field
+            identifiers.
+
+    Returns:
+        dict: a dict of data that is ready to fed to the xml message template
+    """
     template_dict = {name: record[field_id] for name, field_id in fields.items()}
     activity_details = template_dict["activity_details"] or ""
     activity_details = encode_to_ascii(activity_details)
@@ -79,13 +100,18 @@ def build_template_dict(*, record, fields):
 
 
 def build_xml_payload(template_dict):
+    """Populates the xml message template with record values
+
+    Returns:
+        str: a stringifed XML document with the record's data
+    """
     with open(TEMPLATE_FILENAME, "r") as fin:
         template = fin.read()
         return template.format(**template_dict)
 
 
 def init_logger(log_level=logging.INFO):
-    """Return a module logger that streams to stdout"""
+    """Returns a module logger that streams to stdout"""
     logger = logging.getLogger("send_esb_message")
     handler = logging.StreamHandler(stream=sys.stdout)
     formatter = logging.Formatter(fmt=" %(name)s.%(levelname)s: %(message)s")
@@ -124,7 +150,7 @@ def send_message(*, message, endpoint, timeout=20):
 
 
 def get_update_record_payload(*, record_id, status_field):
-    """Prepare a Knack record dict to mark an activity recort as 'Sent'."""
+    """Prepare a Knack record dict to mark an activity record as 'Sent'."""
     payload = {"id": record_id, status_field: "SENT"}
     return payload
 
@@ -158,16 +184,17 @@ def main(app_name):
 
         message = build_xml_payload(template_dict)
 
+        logger.info(f"Sending payload {template_dict}")
+
         send_message(message=message, endpoint=ESB_ENDPOINT)
 
+        logger.info(f"Updating Knack record {record['id']}")
+
         record_payload = get_update_record_payload(
-            record_id=record.id, status_field=config["fields"]["esb_status"]
+            record_id=record["id"], status_field=config["fields"]["esb_status"]
         )
 
         app.record(data=record_payload, method="update", obj=config["obj"])
-        breakpoint()
-
-    breakpoint()
 
 
 if __name__ == "__main__":
