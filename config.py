@@ -12,12 +12,10 @@ CONFIG = {
             "activity_details": "field_1055",
             "activity_name": "field_1053",
         },
-        "esb_status_match": "READY_TO_SEND",
     },
     "signs-markings": {
         "obj": "object_173",
         "view": "view_3052",
-        "esb_status_match": "READY_TO_SEND",
         "fields": {
             "id": "id",
             "emi_id": "todo",

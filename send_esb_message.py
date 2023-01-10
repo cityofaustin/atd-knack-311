@@ -52,13 +52,10 @@ def encode_special_chars(text):
     return text
 
 
-def get_record_filter(*, esb_status_match, fields):
+def get_record_filter(*, fields):
     """Constructs a knack filter object to fetch activities that need to be sent to 311
 
     Args:
-        esb_status_match (string): the name of the activity status will be used to
-            identify records that need to be processed. this has so far been implemented
-            universally as 'READY_TO_SEND'. See config.py.
         fields (dict): A dict of fields from config.py which map to knack field
             identifiers.
 
@@ -72,7 +69,7 @@ def get_record_filter(*, esb_status_match, fields):
             {
                 "field": fields["esb_status"],
                 "operator": "is",
-                "value": esb_status_match,
+                "value": "READY_TO_SEND",
             },
         ],
     }
@@ -136,7 +133,6 @@ def send_message(*, message, endpoint, timeout=20):
         HTTP exception on `400` or `500` response status codes
     """
     headers = {"content-type": "text/xml"}
-
     res = requests.post(
         endpoint,
         data=message,
@@ -145,7 +141,6 @@ def send_message(*, message, endpoint, timeout=20):
         verify=False,
         cert=("esb.cert", "esb.pem"),
     )
-
     res.raise_for_status()
 
 
@@ -188,7 +183,7 @@ def main(app_name):
 
         send_message(message=message, endpoint=ESB_ENDPOINT)
 
-        logger.info(f"Updating Knack record {record['id']}")
+        logger.info(f"Updating Knack record {record['id']} with 'SENT' status")
 
         record_payload = get_update_record_payload(
             record_id=record["id"], status_field=config["fields"]["esb_status"]
