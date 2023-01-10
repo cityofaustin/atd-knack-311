@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - production
+      - main
 
 jobs:
   main:
@@ -26,10 +27,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/atd-knack-311:production
-            ${{ secrets.DOCKER_USERNAME }}/atd-knack-311:staging
-            ${{ secrets.DOCKER_USERNAME }}/atd-knack-311:latest
+          tags: "${{ secrets.DOCKER_USERNAME }}/atd-knack-311:${{ github.ref_name }}"
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
