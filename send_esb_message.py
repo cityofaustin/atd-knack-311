@@ -154,9 +154,7 @@ def main(app_name):
     logger.info(f"Running ESB message util for app: {app_name}")
     config = CONFIG[app_name]
 
-    filters = get_record_filter(
-        esb_status_match=config["esb_status_match"], fields=config["fields"]
-    )
+    filters = get_record_filter(fields=config["fields"])
 
     logger.info(f"Initializing knackpy.App...")
     app = knackpy.App(app_id=KNACK_APP_ID, api_key=KNACK_API_KEY)
