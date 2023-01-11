@@ -157,6 +157,7 @@ def main(app_name):
     filters = get_record_filter(fields=config["fields"])
 
     logger.info(f"Initializing knackpy.App...")
+
     app = knackpy.App(app_id=KNACK_APP_ID, api_key=KNACK_API_KEY)
 
     logger.info(f"Fetching records...")
