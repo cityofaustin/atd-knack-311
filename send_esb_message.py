@@ -91,6 +91,9 @@ def build_template_dict(*, record, fields):
     activity_details = template_dict["activity_details"] or ""
     activity_details = encode_to_ascii(activity_details)
     activity_details = encode_special_chars(activity_details)
+    # prepend activity name to details - this is a temporary patch until 311 supports a
+    # separate activity name field through the integration
+    activity_details = f"${template_dict['activity_name']} - ${activity_details}"
     template_dict["activity_details"] = activity_details
     template_dict["publication_datetime"] = arrow.now().isoformat()
     return template_dict
