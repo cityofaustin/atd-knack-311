@@ -155,6 +155,7 @@ def get_update_record_payload(*, record_id, status_field):
 
 def main(app_name):
     logger.info(f"Running ESB message util for app: {app_name}")
+
     config = CONFIG[app_name]
 
     filters = get_record_filter(fields=config["fields"])
@@ -164,6 +165,7 @@ def main(app_name):
     app = knackpy.App(app_id=KNACK_APP_ID, api_key=KNACK_API_KEY)
 
     logger.info(f"Fetching records...")
+
     records = app.get(config["view"], filters=filters)
 
     logger.info(f"{len(records)} records to process.")
