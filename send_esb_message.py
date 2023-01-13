@@ -91,6 +91,9 @@ def build_template_dict(*, record, fields):
     activity_details = template_dict["activity_details"] or ""
     activity_details = encode_to_ascii(activity_details)
     activity_details = encode_special_chars(activity_details)
+    # prepend activity name to details - this is a temporary patch until 311 supports a
+    # separate activity name field through the integration
+    activity_details = f"${template_dict['activity_name']} - ${activity_details}"
     template_dict["activity_details"] = activity_details
     template_dict["publication_datetime"] = arrow.now().isoformat()
     return template_dict
@@ -152,14 +155,17 @@ def get_update_record_payload(*, record_id, status_field):
 
 def main(app_name):
     logger.info(f"Running ESB message util for app: {app_name}")
+
     config = CONFIG[app_name]
 
     filters = get_record_filter(fields=config["fields"])
 
     logger.info(f"Initializing knackpy.App...")
+
     app = knackpy.App(app_id=KNACK_APP_ID, api_key=KNACK_API_KEY)
 
     logger.info(f"Fetching records...")
+
     records = app.get(config["view"], filters=filters)
 
     logger.info(f"{len(records)} records to process.")
