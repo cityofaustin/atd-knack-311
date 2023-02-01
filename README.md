@@ -2,7 +2,13 @@
 
 ![data-flow](docs/flow.png)
 
-Integration scripts which manage communication between ATD's Knack apps and the City's 311 system.
+This repository holds a single script which manage data flow from Knack apps to 311 CSR system. 
+
+A separate repository, [atd-knack-proxy](https://github.com/cityofaustin/atd-knack-proxy), handles data flow from 311 to Knack apps.
+
+The script works by fetching "activity" record updates from Knack apps, translating them into an XML messages, and posting them to the City's Enterprise Service Bus (ESB), which in turn sends the messages on to the 311 CSR system.
+
+The script currently supports two Knack apps: the AMD Data Tracker and the Signs & Markings app. Additional apps can be added, provided they are configured in a similar fashion [docs needed].
 
 ## Configuration
 
