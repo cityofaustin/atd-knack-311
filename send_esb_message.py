@@ -154,7 +154,7 @@ def get_update_record_payload(*, record_id, status_field):
 
 
 def main(app_name):
-    logger.info(f"Running ESB message util for app: {app_name}")
+    logger.info(f"Processing Knack > 311 messages for app: {app_name}")
 
     config = CONFIG[app_name]
 
