@@ -154,7 +154,7 @@ def get_update_record_payload(*, record_id, status_field):
 
 
 def main(app_name):
-    logger.info(f"Running ESB message util for app: {app_name}")
+    logger.info(f"Processing Knack > 311 messages for app: {app_name}")
 
     config = CONFIG[app_name]
 
@@ -174,7 +174,6 @@ def main(app_name):
         return
 
     for record in records:
-        # we Knackpy to format the record values, which takes care of date formatting for us
         record_formatted = record.format(keys=False)
 
         template_dict = build_template_dict(
