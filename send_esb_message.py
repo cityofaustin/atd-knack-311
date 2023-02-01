@@ -174,7 +174,6 @@ def main(app_name):
         return
 
     for record in records:
-        # we Knackpy to format the record values, which takes care of date formatting for us
         record_formatted = record.format(keys=False)
 
         template_dict = build_template_dict(
