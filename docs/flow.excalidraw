@@ -410,12 +410,12 @@
       "locked": false,
       "fontSize": 36,
       "fontFamily": 1,
-      "text": "send_esb_message.py",
+      "text": "send_knack_messages_to_esb.py",
       "baseline": 32,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "L33H7c-faOGR2V04NnlSS",
-      "originalText": "send_esb_message.py"
+      "originalText": "send_knack_messages_to_esb.py"
     },
     {
       "type": "arrow",
