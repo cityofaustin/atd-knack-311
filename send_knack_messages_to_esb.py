@@ -23,7 +23,9 @@ SPECIAL_CHAR_LOOKUP = {
     "&": "&amp;",
 }
 
-TEMPLATE_FILENAME = "message_template.xml"
+dirname = os.path.dirname(__file__)
+template_filename = os.path.join(dirname, 'message_template.xml')
+
 
 
 def cli_args():
@@ -132,7 +134,7 @@ def build_xml_payload(template_dict):
     Returns:
         str: a stringifed XML document with the record's data
     """
-    with open(TEMPLATE_FILENAME, "r") as fin:
+    with open(template_filename, "r") as fin:
         template = fin.read()
         return template.format(**template_dict)
 
