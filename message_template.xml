@@ -1,26 +1,36 @@
 <soapenv:Envelope
   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
   xmlns:acc="http://www.austintexas.gov/AcceptKnack/">
-   <soapenv:Header/>
-    <soapenv:Body>
-      <acc:submitKnack>
-        <header>
-          <emi>{emi_id}</emi> <!-- blank -->
-          <timestamp>{publication_datetime}</timestamp>   <!-- time of publication in unix milliseconds -->
-          <source>KNACK</source> <!--  constant -->
-          <target>CSR</target> <!-- constant -->
-          <data_type>CSR</data_type>  <!-- constant --> 
-          <event>UPDATE</event> <!-- constant -->
-        </header>
-        <data>
-          <csr>
-             <id>{id}</id><!--   knack record id -->
-             <sr_number>{sr_number}</sr_number>
-             <issue_status_code>{issue_status_code_snapshot}</issue_status_code>
-             <activity_details>{activity_details}</activity_details>
-             <activity_date>{activity_datetime}</activity_date>
-          </csr>
-        </data>
-      </acc:submitKnack>
-   </soapenv:Body>
+  <soapenv:Header/>
+  <soapenv:Body>
+    <acc:submitKnack>
+      <header>
+        <emi>{emi_id}</emi>
+        <!-- blank -->
+        <timestamp>{publication_datetime}</timestamp>
+        <!-- time of publication in unix milliseconds -->
+        <source>KNACK</source>
+        <!--  constant -->
+        <target>CSR</target>
+        <!-- constant -->
+        <data_type>CSR</data_type>
+        <!-- constant -->
+        <event>UPDATE</event>
+        <!-- constant -->
+      </header>
+      <data>
+        <csr>
+          <!--   knack activity record id -->
+          <id>{id}</id>
+          <csr_activity_id>{csr_activity_id}</csr_activity_id>
+          <sr_number>{sr_number}</sr_number>
+          <issue_status_code>{issue_status_code_snapshot}</issue_status_code>
+          <activity_type_code>{csr_activity_code}</activity_type_code>
+          <activity_details>{activity_details}</activity_details>
+          <outcome_code>COMPLET1</outcome_code>
+          <activity_date>{activity_datetime}</activity_date>
+        </csr>
+      </data>
+    </acc:submitKnack>
+  </soapenv:Body>
 </soapenv:Envelope>
