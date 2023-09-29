@@ -193,7 +193,7 @@ def send_message(*, message, endpoint, timeout=20):
         headers=headers,
         timeout=timeout,
         verify=False,
-        cert=("esb.cert", "esb.pem"),
+        cert=("certs/esb.cert", "certs/esb.pem"),
     )
     res.raise_for_status()
 
