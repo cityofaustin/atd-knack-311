@@ -43,6 +43,7 @@ Each Knack app must have an entry in `config.py` which provides metadata that wi
 `fields.activity_datetime` | `field_1054` | an ISO timestamp indicating the datetime the activity occured
 `fields.activity_details` | `field_1055` | text description of the activity
 `fields.activity_name` | `field_1053` | a unique text string the type of activity
+`fields.csr_activity_id`| `field_4299` | the unique ID of this activity in the CSR system. this number is provided by 311 and included in pagincg activity records which are created in Knack through the CSR integration. this ID must be included in the message payload in order to close/update an existing activity. I.e. it is necessary to complete paging activities in CSR.
 
 ## How it works
 
