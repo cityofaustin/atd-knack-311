@@ -76,25 +76,51 @@ def get_record_filter(*, fields):
     return filters
 
 
-def build_template_dict(*, record, fields):
+def build_template_dict(*, record, fields, activity_codes):
     """Prepares the data that will populate the xml message template.
 
     Args:
         record (dict): A knack record
         fields (dict): A dict of fields from config.py which map to knack field
             identifiers.
+        activity_codes (dict): A dict of activity names from config.py which map to
+            CSR activity codes.
 
     Returns:
-        dict: a dict of data that is ready to fed to the xml message template
+        dict: a dict of data that is ready feed into the xml message template
     """
     template_dict = {name: record[field_id] for name, field_id in fields.items()}
     activity_details = template_dict["activity_details"] or ""
     activity_details = encode_to_ascii(activity_details)
     activity_details = encode_special_chars(activity_details)
-    # prepend activity name to details - this is a temporary patch until 311 supports a
-    # separate activity name field through the integration
-    activity_details = f"${template_dict['activity_name']} - ${activity_details}"
     template_dict["activity_details"] = activity_details
+
+    if not template_dict["csr_activity_code"]:
+        # only paging activites have a CSR activity code
+        # otherwise we need to fetch it from our lookup conifg
+        activity_name = template_dict["activity_name"]
+        try:
+            template_dict["csr_activity_code"] = activity_codes[activity_name]
+        except KeyError:
+            raise ValueError(
+                f"Activity name has no corresponding activity type code in 311 CSR: {activity_name}"
+            )
+
+    """311 and Knack to do not agree on what counts as a duplicate issue. This is because
+    311 CSR has a built-in system for flagging dupe SRs based on the SR location. However,
+    that dupe filter is not always effective because residents often report the same issue
+     at a slightly different address. This would most commonly happen at a frontage road
+      intersection where there are intersections controlled by two cabinets.
+      
+    Per 311, if we want to flag a duplicate issue we must use the "closed resolved" status,
+    which closes the issue in 311 like a non-dupe. We do want to track this issue as a dupe
+    within Knack.
+    
+    TLDR we must override the dupe status in knack before we sent the issue to 311. If we
+    send a dupe status to 311 it will break CSR."""
+    if template_dict["issue_status_code_snapshot"] == "closed_duplicate":
+        template_dict["issue_status_code_snapshot"] = "closed_resolved"
+
     template_dict["publication_datetime"] = arrow.now().isoformat()
     return template_dict
 
@@ -119,6 +145,28 @@ def init_logger(log_level=logging.INFO):
     logger.addHandler(handler)
     logger.setLevel(log_level)
     return logger
+
+
+def sort_by_activity_id(records, activity_id_field):
+    """Sort records by the atd_activity_id field. This ensures
+    that records are sent in the order they are created. We could also
+    use the `modified_date` field, but Knack timestamps have minute
+    precision, which is not granular enough. It is currently not
+    possible to modify activities in the Knack UI, so we take
+    that as a guarantee that the activity IDs lowest to highest
+    are oldest to most recently updated.
+
+    Although we can also specify the record sort order in the Knack
+    table view, this method is an extra assurance that we're
+    handling them in the right order.
+
+    Args:
+        records (list): list of CSR activity knackpy.Record objects
+
+    Returns:
+        list of records sorted by atd_activity_id
+    """
+    return sorted(records, key=lambda d: d[activity_id_field])
 
 
 def send_message(*, message, endpoint, timeout=20):
@@ -147,9 +195,9 @@ def send_message(*, message, endpoint, timeout=20):
     res.raise_for_status()
 
 
-def get_update_record_payload(*, record_id, status_field):
-    """Prepare a Knack record dict to mark an activity record as 'Sent'."""
-    payload = {"id": record_id, status_field: "SENT"}
+def get_update_record_payload(*, record_id, status_field, status_text):
+    """Prepare a Knack record dict to update activity status as 'SENT' or 'DO_NOT_SEND'."""
+    payload = {"id": record_id, status_field: status_text}
     return payload
 
 
@@ -170,6 +218,8 @@ def main(app_name):
 
     logger.info(f"{len(records)} records to process.")
 
+    records = sort_by_activity_id(records, config["fields"]["atd_activity_id"])
+
     if not records:
         return
 
@@ -177,20 +227,35 @@ def main(app_name):
         record_formatted = record.format(keys=False)
 
         template_dict = build_template_dict(
-            record=record_formatted, fields=config["fields"]
+            record=record_formatted,
+            fields=config["fields"],
+            activity_codes=config["activity_codes"],
         )
 
-        message = build_xml_payload(template_dict)
+        if template_dict["csr_activity_code"]:
+            message = build_xml_payload(template_dict)
 
-        logger.info(f"Sending payload {template_dict}")
+            logger.info(f"Sending payload {template_dict}")
 
-        send_message(message=message, endpoint=ESB_ENDPOINT)
+            send_message(message=message, endpoint=ESB_ENDPOINT)
 
-        logger.info(f"Updating Knack record {record['id']} with 'SENT' status")
+            logger.info(f"Updating Knack record {record['id']} with 'SENT' status")
 
-        record_payload = get_update_record_payload(
-            record_id=record["id"], status_field=config["fields"]["esb_status"]
-        )
+            record_payload = get_update_record_payload(
+                record_id=record["id"],
+                status_field=config["fields"]["esb_status"],
+                status_text="SENT",
+            )
+        else:
+            # if there is no `csr_activity_code` the activity is to be ignored
+            logger.info(
+                f"Updating Knack record {record['id']} with 'DO_NOT_SEND' status"
+            )
+            record_payload = get_update_record_payload(
+                record_id=record["id"],
+                status_field=config["fields"]["esb_status"],
+                status_text="DO_NOT_SEND",
+            )
 
         app.record(data=record_payload, method="update", obj=config["obj"])
 
