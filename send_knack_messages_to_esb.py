@@ -209,12 +209,6 @@ def get_update_record_payload(*, record_id, status_field, status_text):
 def main(app_name):
     logger.info(f"Processing Knack > 311 messages for app: {app_name}")
 
-    logger.info("--- file paths ---")
-    logger.info(f"abs_dirname: {abs_dirname}")
-    logger.info(f"template_filename: {template_filename}")
-    logger.info(f"cert_filename: {cert_filename}")
-    logger.info(f"key_filename: {key_filename}")
-
     config = CONFIG[app_name]
 
     filters = get_record_filter(fields=config["fields"])
