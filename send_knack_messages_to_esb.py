@@ -210,7 +210,6 @@ def main(app_name):
     logger.info(f"Processing Knack > 311 messages for app: {app_name}")
 
     logger.info("--- file paths ---")
-    logger.info(f"rel_dirname: {rel_dirname}")
     logger.info(f"abs_dirname: {abs_dirname}")
     logger.info(f"template_filename: {template_filename}")
     logger.info(f"cert_filename: {cert_filename}")
