@@ -25,7 +25,8 @@ SPECIAL_CHAR_LOOKUP = {
 
 dirname = os.path.dirname(__file__)
 template_filename = os.path.join(dirname, 'message_template.xml')
-
+cert_filename = os.path.join(dirname, 'certs', 'esb.cert')
+key_filename = os.path.join(dirname, 'certs', 'esb.pem')
 
 
 def cli_args():
@@ -193,7 +194,7 @@ def send_message(*, message, endpoint, timeout=20):
         headers=headers,
         timeout=timeout,
         verify=False,
-        cert=("certs/esb.cert", "certs/esb.pem"),
+        cert=(cert_filename, key_filename),
     )
     res.raise_for_status()
 
