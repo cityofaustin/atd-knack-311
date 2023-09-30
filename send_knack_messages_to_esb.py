@@ -31,6 +31,7 @@ cert_filename = os.path.join(abs_dirname, "certs", "esb.cert")
 key_filename = os.path.join(abs_dirname, "certs", "esb.pem")
 
 
+
 def cli_args():
     parser = argparse.ArgumentParser(
         description="Send 311 activty records from Knack to the Enterprise Service bus (ESB)"
@@ -209,6 +210,13 @@ def get_update_record_payload(*, record_id, status_field, status_text):
 
 def main(app_name):
     logger.info(f"Processing Knack > 311 messages for app: {app_name}")
+
+    logger.info("--- file paths ---")
+    logger.info(f"rel_dirname: {rel_dirname}")
+    logger.info(f"abs_dirname: {abs_dirname}")
+    logger.info(f"template_filename: {template_filename}")
+    logger.info(f"cert_filename: {cert_filename}")
+    logger.info(f"key_filename: {key_filename}")
 
     config = CONFIG[app_name]
 
