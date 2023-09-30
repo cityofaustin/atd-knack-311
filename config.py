@@ -25,7 +25,7 @@ CONFIG = {
             "Dispatch Technician": "DISPTECH",
             "Close Issue (Resolved)": "CLOISSRE",
             "Adjust Timing": "ADJUTIMI",
-            "Complete Repairs ": "REPACOMP",
+            "Complete Repairs": "REPACOMP",
             "Assign to Signal Request Review": "ASSIRERE",
             "Assign to Signal Engineering": "ASTOSIEN",
             "Assign to TMC": "RETOMOMC",
