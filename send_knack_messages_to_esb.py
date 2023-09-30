@@ -23,10 +23,12 @@ SPECIAL_CHAR_LOOKUP = {
     "&": "&amp;",
 }
 
-dirname = os.path.dirname(__file__)
-template_filename = os.path.join(dirname, 'message_template.xml')
-cert_filename = os.path.join(dirname, 'certs', 'esb.cert')
-key_filename = os.path.join(dirname, 'certs', 'esb.pem')
+# get abs path to various xml template and certs
+rel_dirname = os.path.dirname(__file__)
+abs_dirname = os.path.abspath(os.path.join(rel_dirname, os.pardir))
+template_filename = os.path.join(abs_dirname, "message_template.xml")
+cert_filename = os.path.join(abs_dirname, "certs", "esb.cert")
+key_filename = os.path.join(abs_dirname, "certs", "esb.pem")
 
 
 def cli_args():
