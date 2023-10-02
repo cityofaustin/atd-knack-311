@@ -105,7 +105,7 @@ def build_template_dict(*, record, fields, activity_codes):
         # otherwise we need to fetch it from our lookup conifg
         activity_name = template_dict["activity_name"]
         try:
-            template_dict["csr_activity_code"] = activity_codes[activity_name]
+            template_dict["csr_activity_code"] = activity_codes[activity_name] or ""
         except KeyError:
             raise ValueError(
                 f"Activity name has no corresponding activity type code in 311 CSR: {activity_name}"
