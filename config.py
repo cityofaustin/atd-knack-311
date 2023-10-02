@@ -29,7 +29,7 @@ CONFIG = {
             "Assign to Signal Request Review": "ASSIRERE",
             "Assign to Signal Engineering": "ASTOSIEN",
             "Assign to TMC": "RETOMOMC",
-            "Monitor in School  Zone Beacon System": "MONISSRE",
+            "Monitor in School Zone Beacon System": "MONISSRE",
             "Monitor Situation on CCTV": "MONISSRE",
             "311 Feedback": "311FEEDB",
             "Monitor Situation in KITS": "MONISSRE",
