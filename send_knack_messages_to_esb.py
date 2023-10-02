@@ -94,7 +94,7 @@ def build_template_dict(*, record, fields, activity_codes):
     Returns:
         dict: a dict of data that is ready feed into the xml message template
     """
-    template_dict = {name: record[field_id] for name, field_id in fields.items()}
+    template_dict = {name: record[field_id] or "" for name, field_id in fields.items()}
     activity_details = template_dict["activity_details"] or ""
     activity_details = encode_to_ascii(activity_details)
     activity_details = encode_special_chars(activity_details)
