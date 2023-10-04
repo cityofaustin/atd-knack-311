@@ -73,7 +73,7 @@ CONFIG = {
             "Dispatch Technician/Crew": "DISPATC2",
             "Repair/Replace": "TRREPSGN",
             "Attach Image": None,
-            "Send Email": None,
+            "Send Email": "CONTACT",
             "Close Issue (Duplicate)": "CLOIS001",
             "Close Issue (Resolved)": "CLOIS001",
             "311 Feedback": "311FEEDB",
