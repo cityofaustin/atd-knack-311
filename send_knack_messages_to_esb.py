@@ -3,6 +3,7 @@ import argparse
 import logging
 import os
 import sys
+import time
 
 import arrow
 import knackpy
@@ -174,30 +175,41 @@ def sort_by_activity_id(records, activity_id_field):
     return sorted(records, key=lambda d: d[activity_id_field])
 
 
-def send_message(*, message, endpoint, timeout=20):
-    """Sends an xml message to the enterprise service bus
+def send_message(*, message, endpoint, timeout=20, max_retries=3):
+    """Sends an xml message to the enterprise service bus.
 
     Args:
         message (str): the stringified xml message
         endpoint (str): the ESB endpoint url
         timeout (int, optional): the connection timeout in seconds
+        max_retries (int, optiona, default: 3): # of times to retry the request
+            if a `500` error is received
 
     Returns:
         None
 
     Raises:
-        HTTP exception on `400` or `500` response status codes
+        HTTP exception on `400` or `500` response status codes.
+        ConnectionError on DNS error
+        Timeout if request timeout is exceeded
     """
     headers = {"content-type": "text/xml"}
-    res = requests.post(
-        endpoint,
-        data=message,
-        headers=headers,
-        timeout=timeout,
-        verify=False,
-        cert=(cert_filename, key_filename),
-    )
-    res.raise_for_status()
+    tries = 1
+    while True:
+        res = requests.post(
+            endpoint,
+            data=message,
+            headers=headers,
+            timeout=timeout,
+            verify=False,
+            cert=(cert_filename, key_filename),
+        )
+        if res.status_code == 500 and tries < max_retries:
+            tries += 1
+            time.sleep(2)
+            continue
+        res.raise_for_status()
+        break
 
 
 def get_update_record_payload(*, record_id, status_field, status_text):
