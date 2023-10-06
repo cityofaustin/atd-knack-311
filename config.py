@@ -13,7 +13,7 @@ CONFIG = {
             "activity_details": "field_1055",
             "activity_name": "field_1053",
             "csr_activity_id": "field_4583",
-            "csr_activity_code": "field_4582"
+            "csr_activity_code": "field_4582",
         },
         # This dict maps activity names in the AMD or Signs/Markings Data Tracker to activity
         # codes used by the CSR system. Here are the rules:
@@ -60,7 +60,7 @@ CONFIG = {
             "activity_details": "field_3147",
             "activity_name": "field_3144",
             "csr_activity_id": "field_4321",
-            "csr_activity_code": "field_4322"
+            "csr_activity_code": "field_4322",
         },
         # This dict maps activity names in the AMD or Signs/Markings Data Tracker to activity
         # codes used by the CSR system. Here are the rules:
@@ -77,6 +77,7 @@ CONFIG = {
             "Close Issue (Duplicate)": "CLOIS001",
             "Close Issue (Resolved)": "CLOIS001",
             "311 Feedback": "311FEEDB",
+            "Other": None,
         },
     },
 }
