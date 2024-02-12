@@ -93,7 +93,7 @@ def build_template_dict(*, record, fields, activity_codes):
             CSR activity codes.
 
     Returns:
-        dict: a dict of data that is ready feed into the xml message template
+        dict: a dict of data that is ready to feed into the xml message template
     """
     template_dict = {name: record[field_id] or "" for name, field_id in fields.items()}
     activity_details = template_dict["activity_details"] or ""
@@ -122,7 +122,7 @@ def build_template_dict(*, record, fields, activity_codes):
     which closes the issue in 311 like a non-dupe. We do want to track this issue as a dupe
     within Knack.
     
-    TLDR we must override the dupe status in knack before we sent the issue to 311. If we
+    TLDR we must override the dupe status in knack before we send the issue to 311. If we
     send a dupe status to 311 it will break CSR."""
     if template_dict["issue_status_code_snapshot"] == "closed_duplicate":
         template_dict["issue_status_code_snapshot"] = "closed_resolved"
@@ -175,14 +175,14 @@ def sort_by_activity_id(records, activity_id_field):
     return sorted(records, key=lambda d: d[activity_id_field])
 
 
-def send_message(*, message, endpoint, timeout=20, max_retries=3):
+def send_message(*, message, endpoint, timeout=30, max_retries=3):
     """Sends an xml message to the enterprise service bus.
 
     Args:
         message (str): the stringified xml message
         endpoint (str): the ESB endpoint url
-        timeout (int, optional): the connection timeout in seconds
-        max_retries (int, optiona, default: 3): # of times to retry the request
+        timeout (int, optional, default: 30): the connection timeout in seconds
+        max_retries (int, optional, default: 3): # of times to retry the request
             if a `500` error is received
 
     Returns:
