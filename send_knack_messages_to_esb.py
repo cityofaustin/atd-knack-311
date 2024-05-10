@@ -111,10 +111,9 @@ def build_template_dict(*, record, fields, activity_codes, outcome_codes):
             raise ValueError(
                 f"Activity name has no corresponding activity type code in 311 CSR: {activity_name}"
             )
-
     # assign outcome code based on activity code
-    activity_code = template_dict["csr_activity_code"]
-    outcome_code = outcome_codes.get(activity_code, outcome_codes["default"])
+    activity_name = template_dict["activity_name"]
+    outcome_code = outcome_codes.get(activity_name, outcome_codes["default"])
     template_dict["csr_outcome_code"] = outcome_code
 
     """311 and Knack to do not agree on what counts as a duplicate issue. This is because
