@@ -27,7 +27,7 @@
           <issue_status_code>{issue_status_code_snapshot}</issue_status_code>
           <activity_type_code>{csr_activity_code}</activity_type_code>
           <activity_details>{activity_details}</activity_details>
-          <outcome_code>COMPLET1</outcome_code>
+          <outcome_code>{csr_outcome_code}</outcome_code>
           <activity_date>{activity_datetime}</activity_date>
         </csr>
       </data>
