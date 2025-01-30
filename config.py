@@ -45,6 +45,14 @@ CONFIG = {
             "Send Email": None,
             "Coordinate Internally/Externally": "COORINTE",
         },
+        "outcome_codes": {
+            # "ISHABRCS: Issue has been resolved - this outcome code ensures the SR is actually closed"
+            "Close Issue (Duplicate)": "ISHABRCS",
+            "Close Issue (Resolved)": "ISHABRCS",
+            # "ADRERECS: Additional review required - ensure something special happens in CSR"
+            "311 Feedback": "ADRERECS",
+            "default": "COMPLET1"
+        }
     },
     "signs-markings": {
         "obj": "object_173",
@@ -79,5 +87,13 @@ CONFIG = {
             "311 Feedback": "311FEEDB",
             "Other": None,
         },
+        "outcome_codes": {
+            # "ISHABRCS: Issue has been resolved - this outcome code ensures the SR is actually closed"
+            "Close Issue (Duplicate)": "ISHABRCS",
+            "Close Issue (Resolved)": "ISHABRCS",
+            # "ADRERECS: Additional review required - ensure something special happens in CSR"
+            "311 Feedback": "ADRERECS",
+            "default": "COMPLET1"
+        }
     },
 }

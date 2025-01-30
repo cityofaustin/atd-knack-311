@@ -82,7 +82,7 @@ def get_record_filter(*, fields):
     return filters
 
 
-def build_template_dict(*, record, fields, activity_codes):
+def build_template_dict(*, record, fields, activity_codes, outcome_codes):
     """Prepares the data that will populate the xml message template.
 
     Args:
@@ -111,6 +111,10 @@ def build_template_dict(*, record, fields, activity_codes):
             raise ValueError(
                 f"Activity name has no corresponding activity type code in 311 CSR: {activity_name}"
             )
+    # assign outcome code based on activity code
+    activity_name = template_dict["activity_name"]
+    outcome_code = outcome_codes.get(activity_name, outcome_codes["default"])
+    template_dict["csr_outcome_code"] = outcome_code
 
     """311 and Knack to do not agree on what counts as a duplicate issue. This is because
     311 CSR has a built-in system for flagging dupe SRs based on the SR location. However,
@@ -247,6 +251,7 @@ def main(app_name):
             record=record_formatted,
             fields=config["fields"],
             activity_codes=config["activity_codes"],
+            outcome_codes=config["outcome_codes"],
         )
 
         if template_dict["csr_activity_code"]:
