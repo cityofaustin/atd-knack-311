@@ -179,7 +179,7 @@ def sort_by_activity_id(records, activity_id_field):
     return sorted(records, key=lambda d: d[activity_id_field])
 
 
-def send_message(*, message, endpoint, timeout=30, max_retries=3):
+def send_message(*, message, endpoint, timeout=60, max_retries=3):
     """Sends an xml message to the enterprise service bus.
 
     Args:
@@ -210,6 +210,7 @@ def send_message(*, message, endpoint, timeout=30, max_retries=3):
         )
         if res.status_code == 500 and tries < max_retries:
             tries += 1
+            logger.info(f"Retrying request...")
             time.sleep(2)
             continue
         res.raise_for_status()
