@@ -24,7 +24,6 @@
           <id>{id}</id>
           <csr_activity_id>{csr_activity_id}</csr_activity_id>
           <sr_number>{sr_number}</sr_number>
-          <issue_status_code>{issue_status_code_snapshot}</issue_status_code>
           <activity_type_code>{csr_activity_code}</activity_type_code>
           <activity_details>{activity_details}</activity_details>
           <outcome_code>{csr_outcome_code}</outcome_code>
