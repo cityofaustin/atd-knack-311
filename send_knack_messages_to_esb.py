@@ -115,23 +115,8 @@ def build_template_dict(*, record, fields, activity_codes, outcome_codes):
     activity_name = template_dict["activity_name"]
     outcome_code = outcome_codes.get(activity_name, outcome_codes["default"])
     template_dict["csr_outcome_code"] = outcome_code
-
-    """311 and Knack to do not agree on what counts as a duplicate issue. This is because
-    311 CSR has a built-in system for flagging dupe SRs based on the SR location. However,
-    that dupe filter is not always effective because residents often report the same issue
-     at a slightly different address. This would most commonly happen at a frontage road
-      intersection where there are intersections controlled by two cabinets.
-      
-    Per 311, if we want to flag a duplicate issue we must use the "closed resolved" status,
-    which closes the issue in 311 like a non-dupe. We do want to track this issue as a dupe
-    within Knack.
-    
-    TLDR we must override the dupe status in knack before we send the issue to 311. If we
-    send a dupe status to 311 it will break CSR."""
-    if template_dict["issue_status_code_snapshot"] == "closed_duplicate":
-        template_dict["issue_status_code_snapshot"] = "closed_resolved"
-
     template_dict["publication_datetime"] = arrow.now().isoformat()
+
     return template_dict
 
 
