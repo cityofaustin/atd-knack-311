@@ -34,7 +34,7 @@ CONFIG = {
             "Monitor Situation in KITS": "MONISSRE",
             "Close Issue (Duplicate)": "CLOIS001",
             "Remote Monitor Reset - Successful": "REMORESU",
-            "Remote Monitor Reset - Unsuccessful": "REMOR001",
+            "Remote Monitor Reset - Unsuccessful": "REMOREUN",
             "Other": None,
             "Storm-Related": None,
             "Adjust Video Detection": "ADJVIDDE",
