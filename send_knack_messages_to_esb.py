@@ -14,6 +14,7 @@ from config import CONFIG
 KNACK_APP_ID = os.getenv("KNACK_APP_ID")
 KNACK_API_KEY = os.getenv("KNACK_API_KEY")
 ESB_ENDPOINT = os.getenv("ESB_ENDPOINT")
+ESB_API_KEY = os.getenv("ESB_API_KEY")
 
 #  invalid XLM characters to be encoded
 SPECIAL_CHAR_LOOKUP = {
@@ -164,7 +165,7 @@ def sort_by_activity_id(records, activity_id_field):
     return sorted(records, key=lambda d: d[activity_id_field])
 
 
-def send_message(*, message, endpoint, timeout=60, max_retries=3):
+def send_message(*, message, endpoint, timeout=10, max_retries=3):
     """Sends an xml message to the enterprise service bus.
 
     Args:
@@ -182,7 +183,7 @@ def send_message(*, message, endpoint, timeout=60, max_retries=3):
         ConnectionError on DNS error
         Timeout if request timeout is exceeded
     """
-    headers = {"content-type": "text/xml"}
+    headers = {"content-type": "text/xml", "x-api-key": ESB_API_KEY}
     tries = 1
     while True:
         res = requests.post(
@@ -190,8 +191,6 @@ def send_message(*, message, endpoint, timeout=60, max_retries=3):
             data=message,
             headers=headers,
             timeout=timeout,
-            verify=False,
-            cert=(cert_filename, key_filename),
         )
         if res.status_code == 500 and tries < max_retries:
             tries += 1
