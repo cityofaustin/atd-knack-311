@@ -21,6 +21,7 @@ The following environment variables are required.
 - `KNACK_APP_ID`: the Knack application ID
 - `KNACK_API_KEY`: the Knack API key
 - `ESB_ENDPOINT`: the URL of the Enterprise Service Bus
+- `ESB_API_KEY`: the API key to use when authenticating with the ESB
 
 ### Certificates
 
