@@ -25,6 +25,9 @@ SPECIAL_CHAR_LOOKUP = {
     "&": "&amp;",
 }
 
+CONNECTION_TIMEOUT = 10
+READ_TIMEOUT = 60
+
 # get abs path to various xml template and certs
 abs_dirname = os.path.abspath(os.path.join(__file__, os.pardir))
 template_filename = os.path.join(abs_dirname, "message_template.xml")
@@ -165,7 +168,9 @@ def sort_by_activity_id(records, activity_id_field):
     return sorted(records, key=lambda d: d[activity_id_field])
 
 
-def send_message(*, message, endpoint, timeout=10, max_retries=3):
+def send_message(
+    *, message, endpoint, timeout=(CONNECTION_TIMEOUT, READ_TIMEOUT), max_retries=3
+):
     """Sends an xml message to the enterprise service bus.
 
     Args:
