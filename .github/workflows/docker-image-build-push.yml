@@ -35,8 +35,7 @@ jobs:
         with:
           push: true
           platforms: linux/amd64,linux/arm64
-          #tags: "${{ secrets.DOCKER_USERNAME }}/atd-knack-311:${{ github.ref_name }}"
-          tags: "${{ secrets.DOCKER_USERNAME }}/atd-knack-311:testing"
+          tags: "${{ secrets.DOCKER_USERNAME }}/atd-knack-311:${{ github.ref_name }}"
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
