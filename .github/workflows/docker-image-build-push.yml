@@ -7,7 +7,6 @@ on:
     branches:
       - production
       - staging
-      - frank/build-multi-arch
 
 jobs:
   build-image-and-push:
