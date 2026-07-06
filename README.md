@@ -14,7 +14,7 @@ The script currently supports two Knack apps: the AMD Data Tracker and the Signs
 
 ### Environment
 
-It is possible to run end-to-end tests of all systems involved in the Knack <> 311 integration. The test system credentials are available in our password store and include additional documentation.
+It is possible to run end-to-end tests of all systems involved in the Knack <> 311 integration. The test system credentials are available in 1Password under the name **CTM Boomi aka Enterprise Service Bus - ESB - 311 Interface**.
 
 The following environment variables are required.
 
@@ -25,7 +25,7 @@ The following environment variables are required.
 
 ### Certificates
 
-A self-signed certificate and key must be present in the project's root directory and saved as `esb.cert` and `esb.pem` respectively.
+A self-signed certificate and key must be present in the project's root directory and saved as `esb.cert` and `esb.pem` respectively. The certificate files are available in 1Password under the item called **CTM Boomi aka Enterprise Service Bus - ESB - 311 Interface**.
 
 ### Field Mappings (`config.py`)
 
