@@ -245,9 +245,11 @@ def main(app_name):
         )
 
         if template_dict["csr_activity_code"]:
+            logger.info(f"Message payload:\n{template_dict}\n\n")
+
             message = build_xml_payload(template_dict)
 
-            logger.info(f"Sending payload {template_dict}")
+            logger.info(f"Message XML:\n{message}\n\n")
 
             send_message(message=message, endpoint=ESB_ENDPOINT)
 
